@@ -1,4 +1,4 @@
-import { personalInfo } from '@/src/config/site';
+import { personalInfo } from '@/config/site';
 
 export default function About() {
   return (

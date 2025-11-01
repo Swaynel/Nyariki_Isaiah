@@ -1,10 +1,10 @@
 'use client';
 
 import { useState } from 'react';
-import { ContactFormData } from '@/src/types';
-import { saveContact } from '@/src/lib/firebase';
-import { sendEmail } from '@/src/lib/emailjs';
-import { personalInfo } from '@/src/config/site';
+import { ContactFormData } from '@//types';
+import { saveContact } from '@/lib/firebase';
+import { sendEmail } from '@/lib/emailjs';
+import { personalInfo } from '@/config/site';
 
 export default function Contact() {
   const [formData, setFormData] = useState<ContactFormData>({

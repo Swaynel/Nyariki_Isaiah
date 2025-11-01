@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { saveContact } from '@/src/lib/firebase';
-import { sendEmail } from '@/src/lib/emailjs';
-import { personalInfo } from '@/src/config/site';
+import { saveContact } from '@/lib/firebase';
+import { sendEmail } from '@/lib/emailjs';
+import { personalInfo } from '@/config/site';
 
 export async function POST(request: NextRequest) {
   try {

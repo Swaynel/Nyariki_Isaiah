@@ -22,10 +22,10 @@ export default function Hero() {
           Hi, I'm <span className="text-primary">Isaiah Nyariki</span>
         </h1>
         <h2 className="text-xl sm:text-2xl lg:text-3xl mb-8 opacity-90 font-light">
-          Web Developer & Creative Technologist
+          Backend Engineer & Systems Engineer
         </h2>
         <p className="text-lg sm:text-xl mb-12 max-w-2xl mx-auto opacity-80 leading-relaxed">
-          Building dynamic, user-focused web experiences with modern technologies.
+          Specializing in building robust backend systems and scalable applications. 
         </p>
         <button
           onClick={scrollToContact}

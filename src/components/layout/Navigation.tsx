@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { personalInfo } from '@/src/config/site';
+import { personalInfo } from '@/config/site';
 import ThemeToggle from './ThemeToggle';
 import SidePanel from './SidePanel';
 import Link from 'next/link';

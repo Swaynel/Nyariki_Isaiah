@@ -1,8 +1,8 @@
 'use client';
 
 import { useEffect } from 'react';
-import { personalInfo } from '@/src/config/site';
-import { useTheme } from '@/src/components/providers/ThemeProvider';
+import { personalInfo } from '@/config/site';
+import { useTheme } from '@/components/providers/ThemeProvider';
 
 interface SidePanelProps {
   isOpen: boolean;

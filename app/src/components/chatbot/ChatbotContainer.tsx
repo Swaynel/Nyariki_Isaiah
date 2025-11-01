@@ -1,11 +1,11 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import type { ChatMessage as ChatMessageType } from '@/src/types';
-import ChatMessage from '@/src/components/chatbot/ChatMessage';
-import { sendChatMessage } from '@/src/lib/xai';
-import ChatInput from '@/src/components/chatbot/ChatInput';
-import { useChatbot } from '@/src/components/chatbot/ChatbotProvider';
+import type { ChatMessage as ChatMessageType } from '@/types';
+import ChatMessage from './ChatMessage';
+import { sendChatMessage } from '@/lib/xai';
+import ChatInput from './ChatInput';
+import { useChatbot } from './ChatbotProvider';
 
 export default function ChatbotContainer() {
   const { isOpen, closeChatbot } = useChatbot();

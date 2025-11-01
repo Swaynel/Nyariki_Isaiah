@@ -24,9 +24,9 @@
     ],
     "paths": {
       "@/*": [
-        "./*"
+        "./src/*"
       ]
-    }
+    },
   },
   "include": [
     "next-env.d.ts",
@@ -35,7 +35,7 @@
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
     "**/*.mts"
-  ],
+, "tailwind.config.mjs"  ],
   "exclude": [
     "node_modules"
   ]

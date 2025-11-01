@@ -1,4 +1,4 @@
-import { ProjectFilter as FilterType } from '@/src/types';
+import { ProjectFilter as FilterType } from '@//types';
 
 interface ProjectFilterProps {
   filters: string[];

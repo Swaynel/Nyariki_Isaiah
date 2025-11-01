@@ -1,8 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { projects } from '@/src/config/site';
-import { ProjectFilter as ProjectFilterType, Project } from '@/src/types';
+import { projects } from '@/config/site';
+import { ProjectFilter as ProjectFilterType, Project } from '@/types';
 import ProjectCard from './ProjectCard';
 import ProjectFilterComponent from './ProjectFilter';
 

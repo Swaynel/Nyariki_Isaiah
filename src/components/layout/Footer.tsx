@@ -1,4 +1,4 @@
-import { personalInfo } from '@/src/config/site';
+import { personalInfo } from '@/config/site';
 
 export default function Footer() {
   return (
@@ -10,7 +10,7 @@ export default function Footer() {
         </p>
         <div className="flex justify-center space-x-6">
           <a 
-            href={`https://github.com/${personalInfo.githubUsername}`} 
+            href={`https://github.com/${personalInfo.githubUsername}`}
             target="_blank" 
             rel="noopener noreferrer"
             className="text-2xl hover:text-primary transition-colors transform hover:-translate-y-1 duration-300"

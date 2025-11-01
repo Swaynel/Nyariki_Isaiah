@@ -1,4 +1,4 @@
-import { SiteConfig } from '@/src/types';
+import { SiteConfig } from '@/types';
 
 export const siteConfig: SiteConfig = {
   personalInfo: {
@@ -7,7 +7,7 @@ export const siteConfig: SiteConfig = {
     linkedinUrl: 'https://linkedin.com/in/isaiah-nyariki',
     blogUrl: 'https://isaiahnyariki.com',
     email: 'isaiahnyariki300@gmail.com',
-    bio: "I'm a passionate web developer specializing in JavaScript, with experience building full-stack applications and creative web solutions."
+    bio: 'Backend & Systems Engineer focused on building reliable, scalable APIs and data pipelines with Node.js and TypeScript. Experienced in distributed systems, observability, and performance optimization to deliver production-ready services.'
   },
   navigation: [
     { label: 'About', href: '#about' },

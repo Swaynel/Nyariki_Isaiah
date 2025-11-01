@@ -1,7 +1,7 @@
 import { initializeApp, getApps, FirebaseApp } from 'firebase/app';
 import { getFirestore, collection, addDoc, Firestore } from 'firebase/firestore';
 import { getAuth, signInAnonymously, Auth } from 'firebase/auth';
-import { ContactFormData } from '@/src/types';
+import { ContactFormData } from '@//types';
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,

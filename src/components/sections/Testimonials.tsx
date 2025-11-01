@@ -1,4 +1,4 @@
-import { testimonials } from '@/src/config/site';
+import { testimonials } from '@/config/site';
 
 export default function Testimonials() {
   return (

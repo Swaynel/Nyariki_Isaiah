@@ -1,4 +1,4 @@
-import { skills } from '@/src/config/site';
+import { skills } from '@/config/site';
 
 export default function Skills() {
   return (

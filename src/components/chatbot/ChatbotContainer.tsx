@@ -1,8 +1,8 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import type { ChatMessage } from '@/src/types';
-import { sendChatMessage } from '@/src/lib/xai';
+import type { ChatMessage } from '@/types';
+import { sendChatMessage } from '@/lib/xai';
 import ChatMessageComponent from './ChatMessage';
 import ChatInput from './ChatInput';
 import { useChatbot } from './ChatbotProvider';
@@ -80,7 +80,7 @@ export default function ChatbotContainer() {
               <div className="w-2 h-2 bg-current rounded-full animate-bounce" style={{ animationDelay: '0.1s' }} />
               <div className="w-2 h-2 bg-current rounded-full animate-bounce" style={{ animationDelay: '0.2s' }} />
             </div>
-            <span>Grok is thinking...</span>
+            <span>Sayan-ai is thinking...</span>
           </div>
         )}
         <div ref={messagesEndRef} />

@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
 import { Inter, Montserrat } from 'next/font/google';
 import './globals.css';
-import { ThemeProvider } from '@/src/components/providers/ThemeProvider';
-import { ChatbotProvider } from '@/src/components/chatbot/ChatbotProvider';
+import { ThemeProvider } from '@/components/providers/ThemeProvider';
+import { ChatbotProvider } from '@/components/chatbot/ChatbotProvider';
 
 const inter = Inter({ 
   subsets: ['latin'], 
@@ -15,8 +15,8 @@ const montserrat = Montserrat({
 });
 
 export const metadata: Metadata = {
-  title: 'Isaiah Nyariki - Web Developer',
-  description: 'Portfolio of Isaiah Nyariki, a web developer specializing in JavaScript and modern web technologies.',
+  title: 'Isaiah Nyariki - Backend Engineer',
+  description: 'Portfolio of Isaiah Nyariki, a backend engineer specializing in Node.js and modern web technologies.',
   authors: [{ name: 'Isaiah Nyariki' }],
 };
 
