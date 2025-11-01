@@ -1,4 +1,5 @@
-import { Project } from '@//types';
+import { Project } from '@/types';
+import Image from 'next/image';
 
 interface ProjectCardProps {
   project: Project;
@@ -9,7 +10,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
     <div className="bg-background border border-border rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-2 group">
       <div className="relative h-48 overflow-hidden">
         {project.thumbnail ? (
-          <img
+          <Image
             src={project.thumbnail}
             alt={project.title}
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"

@@ -19,7 +19,7 @@ export default function Hero() {
       
       <div className="container-custom px-4 sm:px-6 lg:px-8 text-center relative z-10 animate-fade-in-up">
         <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold font-heading mb-6">
-          Hi, I'm <span className="text-primary">Isaiah Nyariki</span>
+          Hi, I&apos;m <span className="text-primary">Isaiah Nyariki</span>
         </h1>
         <h2 className="text-xl sm:text-2xl lg:text-3xl mb-8 opacity-90 font-light">
           Backend Engineer & System Architect

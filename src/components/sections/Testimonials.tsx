@@ -14,7 +14,7 @@ export default function Testimonials() {
               key={testimonial.id}
               className="bg-card border border-border rounded-lg p-6 shadow-lg hover:shadow-xl transition-shadow duration-300"
             >
-              <p className="text-lg italic mb-4">"{testimonial.quote}"</p>
+              <p className="text-lg italic mb-4">&ldquo;{testimonial.quote}&rdquo;</p>
               <cite className="text-primary font-semibold not-italic">
                 - {testimonial.author}, {testimonial.role}
               </cite>
