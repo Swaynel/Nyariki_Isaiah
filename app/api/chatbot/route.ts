@@ -1,7 +1,7 @@
 import { NextRequest } from 'next/server';
 import { CohereClient } from 'cohere-ai';
 
-export const runtime = 'edge';
+export const runtime = 'nodejs';
 
 interface Message {
   role: 'user' | 'assistant';
