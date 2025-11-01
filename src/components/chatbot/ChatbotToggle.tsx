@@ -1,6 +1,6 @@
 'use client';
 
-import { useChatbot } from '@/src/components/chatbot/ChatbotProvider';
+import { useChatbot } from './ChatbotProvider';
 
 export default function ChatbotToggle() {
   const { isOpen, toggleChatbot } = useChatbot();

@@ -2,17 +2,18 @@
 
 import { useState } from 'react';
 import { projects } from '@/src/config/site';
-import { ProjectFilter } from '@/src/types';
-import ProjectCard from '@/src/components/sections/Projects/ProjectCard';
-import ProjectFilterComponent from '@/src/components/sections/Projects/ProjectFilter';
+import { ProjectFilter as ProjectFilterType, Project } from '@/src/types';
+import ProjectCard from './ProjectCard';
+import ProjectFilterComponent from './ProjectFilter';
+
 
 export default function Projects() {
-  const [activeFilter, setActiveFilter] = useState<ProjectFilter>('all');
+  const [activeFilter, setActiveFilter] = useState<ProjectFilterType>('all');
   
-  const allTags = [...new Set(projects.flatMap(project => project.tags))];
+  const allTags = Array.from(new Set(projects.flatMap((project: Project) => project.tags))) as string[];
   const filteredProjects = activeFilter === 'all' 
     ? projects 
-    : projects.filter(project => project.tags.includes(activeFilter));
+    : projects.filter((project: Project) => project.tags.includes(activeFilter));
 
   return (
     <section id="projects" className="section-padding bg-card">
@@ -29,7 +30,7 @@ export default function Projects() {
         />
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-8">
-          {filteredProjects.map((project) => (
+          {filteredProjects.map((project: Project) => (
             <ProjectCard key={project.id} project={project} />
           ))}
         </div>

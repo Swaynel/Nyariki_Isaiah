@@ -2,17 +2,18 @@
 
 import { useState } from 'react';
 import { projects } from '@/src/config/site';
-import { ProjectFilter } from '@/src/types';
+import { ProjectFilter as FilterType, Project } from '@/src/types';
 import ProjectCard from '@/src/components/sections/Projects/ProjectCard';
-import ProjectFilterComponent from '@/src/components/sections/Projects/ProjectFilter';
+import ProjectFilter from '@/src/components/sections/Projects/ProjectFilter';
+
 
 export default function Projects() {
-  const [activeFilter, setActiveFilter] = useState<ProjectFilter>('all');
+  const [activeFilter, setActiveFilter] = useState<FilterType>('all');
   
-  const allTags = [...new Set(projects.flatMap(project => project.tags))];
+  const allTags = [...new Set(projects.flatMap((project: Project) => project.tags))];
   const filteredProjects = activeFilter === 'all' 
     ? projects 
-    : projects.filter(project => project.tags.includes(activeFilter));
+    : projects.filter((project: Project) => project.tags.includes(activeFilter));
 
   return (
     <section id="projects" className="section-padding bg-card">
@@ -22,14 +23,14 @@ export default function Projects() {
           <span className="absolute bottom-0 left-0 w-12 h-1 bg-primary mt-2" />
         </h2>
         
-        <ProjectFilterComponent 
-          filters={['all', ...allTags]}
+        <ProjectFilter 
+          filters={['all', ...(allTags as string[])]}
           activeFilter={activeFilter}
           onFilterChange={setActiveFilter}
         />
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-8">
-          {filteredProjects.map((project) => (
+          {filteredProjects.map((project: Project) => (
             <ProjectCard key={project.id} project={project} />
           ))}
         </div>
