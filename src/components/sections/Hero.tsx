@@ -4,37 +4,92 @@ import { useEffect, useState } from 'react';
 import { personalInfo } from '@/config/site';
 import WardenBot from '@/components/WardenBot';
 
+const HERO_INTRO = "I'm Sayan.";
 const HERO_SUPPORT =
   "Right now I'm highlighting reliable APIs, scalable backend services, and disciplined system design shaped for production pressure.";
+const INTRO_PREFIX = "I'm ";
+const INTRO_NAME = 'Sayan';
 
 export default function Hero() {
+  const [typedIntro, setTypedIntro] = useState('');
   const [typedMessage, setTypedMessage] = useState('');
-  const [isTyping, setIsTyping] = useState(true);
-  const [showSupport, setShowSupport] = useState(false);
+  const [typedSupport, setTypedSupport] = useState('');
+  const [isTypingIntro, setIsTypingIntro] = useState(true);
+  const [isTypingMessage, setIsTypingMessage] = useState(false);
+  const [isTypingSupport, setIsTypingSupport] = useState(false);
+  const [isGreeting, setIsGreeting] = useState(false);
+  const [isBowing, setIsBowing] = useState(false);
   const heroMessage = `I speak for the systems behind ${personalInfo.name}'s work. I help you read the architecture faster, understand the engineering choices, and move through the portfolio with context instead of guesswork.`;
-  const isSpeaking = isTyping && typedMessage.length > 0;
+  const isSpeaking =
+    (isTypingIntro && typedIntro.length > 0) ||
+    (isTypingMessage && typedMessage.length > 0) ||
+    (isTypingSupport && typedSupport.length > 0);
 
   useEffect(() => {
-    let index = 0;
     let timeoutId: ReturnType<typeof setTimeout> | undefined;
+    let introIndex = 0;
+    let messageIndex = 0;
+    let supportIndex = 0;
 
+    setTypedIntro('');
     setTypedMessage('');
-    setIsTyping(true);
-    setShowSupport(false);
+    setTypedSupport('');
+    setIsTypingIntro(true);
+    setIsTypingMessage(false);
+    setIsTypingSupport(false);
+    setIsGreeting(false);
+    setIsBowing(false);
 
-    const typeNext = () => {
-      if (index <= heroMessage.length) {
-        setTypedMessage(heroMessage.slice(0, index));
-        index += 1;
-        timeoutId = setTimeout(typeNext, index < 8 ? 70 : 24);
+    const startBow = () => {
+      setIsBowing(true);
+      timeoutId = setTimeout(() => setIsBowing(false), 920);
+    };
+
+    const typeSupport = () => {
+      if (supportIndex <= HERO_SUPPORT.length) {
+        setTypedSupport(HERO_SUPPORT.slice(0, supportIndex));
+        supportIndex += 1;
+        timeoutId = setTimeout(typeSupport, supportIndex < 8 ? 52 : 24);
         return;
       }
 
-      setIsTyping(false);
-      timeoutId = setTimeout(() => setShowSupport(true), 180);
+      setIsTypingSupport(false);
+      timeoutId = setTimeout(startBow, 220);
     };
 
-    timeoutId = setTimeout(typeNext, 320);
+    const typeMessage = () => {
+      if (messageIndex <= heroMessage.length) {
+        setTypedMessage(heroMessage.slice(0, messageIndex));
+        messageIndex += 1;
+        timeoutId = setTimeout(typeMessage, messageIndex < 8 ? 55 : 24);
+        return;
+      }
+
+      setIsTypingMessage(false);
+      setIsTypingSupport(true);
+      timeoutId = setTimeout(typeSupport, 180);
+    };
+
+    const startMessage = () => {
+      setIsGreeting(false);
+      setIsTypingMessage(true);
+      timeoutId = setTimeout(typeMessage, 120);
+    };
+
+    const typeIntro = () => {
+      if (introIndex <= HERO_INTRO.length) {
+        setTypedIntro(HERO_INTRO.slice(0, introIndex));
+        introIndex += 1;
+        timeoutId = setTimeout(typeIntro, introIndex < 5 ? 90 : 55);
+        return;
+      }
+
+      setIsTypingIntro(false);
+      setIsGreeting(true);
+      timeoutId = setTimeout(startMessage, 820);
+    };
+
+    timeoutId = setTimeout(typeIntro, 320);
 
     return () => {
       if (timeoutId) {
@@ -51,12 +106,26 @@ export default function Hero() {
     document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' });
   };
 
+  const introPrefix = typedIntro.slice(0, Math.min(typedIntro.length, INTRO_PREFIX.length));
+  const introName =
+    typedIntro.length > INTRO_PREFIX.length
+      ? typedIntro.slice(
+          INTRO_PREFIX.length,
+          Math.min(typedIntro.length, INTRO_PREFIX.length + INTRO_NAME.length)
+        )
+      : '';
+  const introSuffix =
+    typedIntro.length > INTRO_PREFIX.length + INTRO_NAME.length
+      ? typedIntro.slice(INTRO_PREFIX.length + INTRO_NAME.length)
+      : '';
+
   return (
     <section id="hero" className="relative min-h-screen overflow-hidden bg-background">
       {/* Bot sits on the LEFT half */}
       <WardenBot
         color="blue"
-        state={isSpeaking ? 'active' : 'thinking'}
+        state={isSpeaking ? 'active' : isGreeting || isBowing ? 'idle' : 'thinking'}
+        gesture={isGreeting ? 'greeting' : isBowing ? 'bow' : 'none'}
         side="left"
         fullBleed
         className="absolute inset-0 h-full min-h-screen w-full"
@@ -98,8 +167,19 @@ export default function Hero() {
                 Message From Sayan
               </span>
 
-              <h1 className="mt-6 text-4xl font-bold font-heading leading-tight text-foreground dark:text-white sm:text-5xl lg:text-6xl">
-                I&apos;m <span className="text-sky-600 dark:text-sky-300">Sayan</span>.
+              <h1
+                aria-live="polite"
+                className="mt-6 min-h-[3.5rem] text-4xl font-bold font-heading leading-tight text-foreground dark:text-white sm:min-h-[4.25rem] sm:text-5xl lg:min-h-[4.75rem] lg:text-6xl"
+              >
+                {introPrefix}
+                <span className="text-sky-600 dark:text-sky-300">{introName}</span>
+                {introSuffix}
+                {isTypingIntro ? (
+                  <span
+                    aria-hidden="true"
+                    className="ml-1 inline-block h-[0.95em] w-[0.12em] animate-pulse align-[-0.12em] bg-sky-600 dark:bg-sky-300"
+                  />
+                ) : null}
               </h1>
 
               <p
@@ -107,7 +187,7 @@ export default function Hero() {
                 className="mt-5 min-h-[7.5rem] text-lg leading-relaxed text-foreground/85 dark:text-slate-200 sm:min-h-[6.25rem] sm:text-xl"
               >
                 {typedMessage}
-                {isTyping ? (
+                {isTypingMessage ? (
                   <span
                     aria-hidden="true"
                     className="ml-1 inline-block h-[1.05em] w-[0.12em] animate-pulse align-[-0.16em] bg-sky-600 dark:bg-sky-300"
@@ -116,11 +196,16 @@ export default function Hero() {
               </p>
 
               <p
-                className={`mt-5 max-w-xl text-base leading-relaxed text-muted-foreground transition-all duration-500 dark:text-slate-300 sm:text-lg ${
-                  showSupport ? 'translate-y-0 opacity-100' : 'translate-y-2 opacity-0'
-                }`}
+                aria-live="polite"
+                className="mt-5 min-h-[4.5rem] max-w-xl text-base leading-relaxed text-muted-foreground dark:text-slate-300 sm:min-h-[4rem] sm:text-lg"
               >
-                {HERO_SUPPORT}
+                {typedSupport}
+                {isTypingSupport ? (
+                  <span
+                    aria-hidden="true"
+                    className="ml-1 inline-block h-[1.05em] w-[0.12em] animate-pulse align-[-0.16em] bg-sky-600 dark:bg-sky-300"
+                  />
+                ) : null}
               </p>
             </div>
 

@@ -38,11 +38,13 @@ const orbThemes = {
 
 type OrbColor = keyof typeof orbThemes;
 type BotState = 'idle' | 'active' | 'thinking';
+type BotGesture = 'none' | 'greeting' | 'bow';
 
 interface WardenBotProps {
   color?: OrbColor;
   className?: string;
   state?: BotState;
+  gesture?: BotGesture;
   fullBleed?: boolean;
   /** Which side of the viewport the bot occupies in fullBleed mode. Default: 'right' */
   side?: 'left' | 'right';
@@ -51,6 +53,7 @@ interface WardenBotProps {
 interface WardenBotSceneProps {
   color: OrbColor;
   state?: BotState;
+  gesture?: BotGesture;
   offset?: [number, number, number];
   pointingSide?: 'left' | 'right';
 }
@@ -147,31 +150,45 @@ function ArmAssembly({
   side,
   theme,
   speaking,
+  gesture,
   pointingSide,
 }: {
   side: 'left' | 'right';
   theme: (typeof orbThemes)[OrbColor];
   speaking: boolean;
+  gesture: BotGesture;
   pointingSide: 'left' | 'right';
 }) {
   const direction = side === 'left' ? -1 : 1;
   const armRef = useRef<THREE.Group>(null);
   const handRef = useRef<THREE.Group>(null);
+  const thumbRef = useRef<THREE.Mesh>(null);
   const leadArm = side === pointingSide;
 
   useFrame((state) => {
     const elapsed = state.clock.getElapsedTime();
     const targetDirection = pointingSide === 'right' ? 1 : -1;
+    const greeting = gesture === 'greeting' && leadArm;
     const idleArmZ = direction * 0.22;
-    const targetArmZ = speaking
-      ? targetDirection * (leadArm ? 1.05 : 0.46)
-      : idleArmZ;
-    const targetArmX = speaking ? -0.18 : 0;
-    const targetHandZ = speaking
-      ? targetDirection * (leadArm ? -0.32 : -0.12)
-      : 0;
-    const targetHandY = speaking && leadArm ? -0.71 : -0.68;
-    const emphasisLift = speaking ? Math.sin(elapsed * 9.4) * 0.018 : 0;
+    const targetArmZ = greeting
+      ? targetDirection * 0.72
+      : speaking
+        ? targetDirection * (leadArm ? 1.05 : 0.46)
+        : idleArmZ;
+    const targetArmX = greeting ? -0.28 : speaking ? -0.18 : 0;
+    const targetHandZ = greeting
+      ? targetDirection * 0.46
+      : speaking
+        ? targetDirection * (leadArm ? -0.32 : -0.12)
+        : 0;
+    const targetHandY = greeting ? -0.56 : speaking && leadArm ? -0.71 : -0.68;
+    const targetHandX = greeting ? targetDirection * 0.05 : 0;
+    const emphasisLift =
+      gesture === 'greeting'
+        ? Math.sin(elapsed * 10.8) * 0.012
+        : speaking
+          ? Math.sin(elapsed * 9.4) * 0.018
+          : 0;
 
     if (armRef.current) {
       armRef.current.rotation.z = THREE.MathUtils.lerp(
@@ -195,6 +212,19 @@ function ArmAssembly({
       handRef.current.position.y = THREE.MathUtils.lerp(
         handRef.current.position.y,
         targetHandY + emphasisLift,
+        0.16
+      );
+      handRef.current.position.x = THREE.MathUtils.lerp(
+        handRef.current.position.x,
+        targetHandX,
+        0.16
+      );
+    }
+
+    if (thumbRef.current) {
+      thumbRef.current.scale.y = THREE.MathUtils.lerp(
+        thumbRef.current.scale.y,
+        greeting ? 1.4 : 1,
         0.16
       );
     }
@@ -244,7 +274,7 @@ function ArmAssembly({
           <meshStandardMaterial color="#202938" roughness={0.28} metalness={0.3} />
         </mesh>
 
-        <mesh position={[0.08 * direction, -0.03, 0.05]} rotation={[0, 0, direction * 0.55]}>
+        <mesh ref={thumbRef} position={[0.08 * direction, -0.03, 0.05]} rotation={[0, 0, direction * 0.55]}>
           <boxGeometry args={[0.04, 0.12, 0.04]} />
           <meshStandardMaterial color="#202938" roughness={0.28} metalness={0.3} />
         </mesh>
@@ -339,6 +369,7 @@ function LegAssembly({
 function WardenBotScene({
   color,
   state: botState,
+  gesture = 'none',
   offset = [0, 0, 0],
   pointingSide = 'right',
 }: WardenBotSceneProps) {
@@ -351,20 +382,29 @@ function WardenBotScene({
   const [hovered, setHovered] = useState(false);
   const theme = orbThemes[color];
   const speaking = botState === 'active';
+  const greeting = gesture === 'greeting';
+  const bowing = gesture === 'bow';
 
   useFrame((state) => {
     const elapsed = state.clock.getElapsedTime();
     const pulse = (Math.sin(elapsed * 2.4) + 1) * 0.5;
     const thinking = botState === 'thinking' || (!botState && Math.sin(elapsed * 0.6) > 0.7);
-    const aware = hovered || botState === 'active' || botState === 'thinking';
+    const aware = hovered || botState === 'active' || botState === 'thinking' || greeting || bowing;
     const motionSpeed = botState === 'active' ? 1.15 : botState === 'thinking' ? 0.9 : 1;
     const targetDirection = pointingSide === 'right' ? 1 : -1;
-    const jumpCycle = Math.max(0, Math.sin(elapsed * (2.1 * motionSpeed)));
-    const jumpHeight = Math.pow(jumpCycle, 1.55) * 0.34;
+    const jumpCycle = bowing ? 0 : Math.max(0, Math.sin(elapsed * (2.1 * motionSpeed)));
+    const bowLean = bowing ? 0.38 : 0;
+    const bowDrop = bowing ? -0.14 : 0;
+    const bowReach = bowing ? 0.08 : 0;
+    const jumpHeight = bowing ? bowDrop : Math.pow(jumpCycle, 1.55) * 0.34;
 
     if (groupRef.current) {
       groupRef.current.rotation.y = THREE.MathUtils.lerp(groupRef.current.rotation.y, 0, 0.08);
-      groupRef.current.rotation.x = THREE.MathUtils.lerp(groupRef.current.rotation.x, 0, 0.08);
+      groupRef.current.rotation.x = THREE.MathUtils.lerp(
+        groupRef.current.rotation.x,
+        bowLean,
+        0.08
+      );
       groupRef.current.position.x = THREE.MathUtils.lerp(
         groupRef.current.position.x,
         offset[0] + Math.sin(elapsed * 3) * 0.002,
@@ -377,7 +417,7 @@ function WardenBotScene({
       );
       groupRef.current.position.z = THREE.MathUtils.lerp(
         groupRef.current.position.z,
-        offset[2] + Math.cos(elapsed * 2.5) * 0.002,
+        offset[2] + bowReach + Math.cos(elapsed * 2.5) * 0.002,
         0.08
       );
 
@@ -389,17 +429,17 @@ function WardenBotScene({
     if (outerRef.current) {
       outerRef.current.rotation.y = THREE.MathUtils.lerp(
         outerRef.current.rotation.y,
-        speaking ? targetDirection * 0.2 : 0,
+        greeting ? 0 : speaking ? targetDirection * 0.2 : 0,
         0.08
       );
       outerRef.current.rotation.x = THREE.MathUtils.lerp(
         outerRef.current.rotation.x,
-        speaking ? -0.06 : 0,
+        greeting ? -0.09 : speaking ? -0.06 : 0,
         0.08
       );
       outerRef.current.rotation.z = THREE.MathUtils.lerp(
         outerRef.current.rotation.z,
-        speaking ? targetDirection * -0.07 : 0,
+        greeting ? targetDirection * -0.1 : speaking ? targetDirection * -0.07 : 0,
         0.05
       );
     }
@@ -407,12 +447,12 @@ function WardenBotScene({
     if (coreRef.current) {
       coreRef.current.position.x = THREE.MathUtils.lerp(
         coreRef.current.position.x,
-        speaking ? targetDirection * 0.05 : 0,
+        greeting ? 0 : speaking ? targetDirection * 0.05 : 0,
         0.1
       );
       coreRef.current.position.y = THREE.MathUtils.lerp(
         coreRef.current.position.y,
-        speaking ? 0.1 : 0.08,
+        greeting ? 0.1 : speaking ? 0.1 : 0.08,
         0.1
       );
     }
@@ -427,6 +467,21 @@ function WardenBotScene({
           0.08
         );
       }
+    }
+
+    const winkEyeRef = pointingSide === 'right' ? rightEyeRef.current : leftEyeRef.current;
+    const openEyeRef = pointingSide === 'right' ? leftEyeRef.current : rightEyeRef.current;
+    if (winkEyeRef) {
+      winkEyeRef.scale.y = THREE.MathUtils.lerp(winkEyeRef.scale.y, greeting ? 0.16 : 1, 0.18);
+      winkEyeRef.position.y = THREE.MathUtils.lerp(
+        winkEyeRef.position.y,
+        greeting ? 0.02 : 0,
+        0.18
+      );
+    }
+    if (openEyeRef) {
+      openEyeRef.scale.y = THREE.MathUtils.lerp(openEyeRef.scale.y, 1, 0.18);
+      openEyeRef.position.y = THREE.MathUtils.lerp(openEyeRef.position.y, 0, 0.18);
     }
 
     if (lightRef.current && coreRef.current) {
@@ -548,8 +603,20 @@ function WardenBotScene({
             <meshStandardMaterial color="#202938" roughness={0.36} metalness={0.36} />
           </mesh>
 
-          <ArmAssembly side="left" theme={theme} speaking={speaking} pointingSide={pointingSide} />
-          <ArmAssembly side="right" theme={theme} speaking={speaking} pointingSide={pointingSide} />
+          <ArmAssembly
+            side="left"
+            theme={theme}
+            speaking={speaking}
+            gesture={gesture}
+            pointingSide={pointingSide}
+          />
+          <ArmAssembly
+            side="right"
+            theme={theme}
+            speaking={speaking}
+            gesture={gesture}
+            pointingSide={pointingSide}
+          />
 
           <LegAssembly side="left" speaking={speaking} pointingSide={pointingSide} />
           <LegAssembly side="right" speaking={speaking} pointingSide={pointingSide} />
@@ -587,6 +654,7 @@ export default function WardenBot({
   color = 'blue',
   className,
   state,
+  gesture = 'none',
   fullBleed = false,
   side = 'right',
 }: WardenBotProps) {
@@ -617,6 +685,7 @@ export default function WardenBot({
             <WardenBotScene
               color={color}
               state={state}
+              gesture={gesture}
               offset={[xOffset, 0, 0]}
               pointingSide={pointingSide}
             />
@@ -659,7 +728,7 @@ export default function WardenBot({
             </Html>
           }
         >
-          <WardenBotScene color={color} state={state} pointingSide="right" />
+          <WardenBotScene color={color} state={state} gesture={gesture} pointingSide="right" />
         </Suspense>
       </Canvas>
     </div>
