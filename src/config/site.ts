@@ -26,9 +26,9 @@ export const siteConfig: SiteConfig = {
       id: 'kazisha-connect',
       title: 'E-Commerce Platform',
       description: 'A full-stack Job connect website built with vanilla javascript, Node.js, and uses fireStore as its database.',
-      link: 'https://kazisha-connect.vercel.app',
-      demoUrl: 'https://kazisha-connect.vercel.app',
-      tags: ['VanillaJs', 'Node.js', 'firestore'],
+      link: 'https://manualink-nx.vercel.app',
+      demoUrl: 'https://manualink-nx.vercel.app',
+      tags: ['TypeScript', 'Node.js', 'firestore'],
       featured: true
     },
     {
@@ -37,7 +37,7 @@ export const siteConfig: SiteConfig = {
       description: 'A live web experience deployed on Vercel.',
       link: 'https://collegia-rerun.vercel.app',
       demoUrl: 'https://collegia-rerun.vercel.app',
-      tags: ['JavaScript', 'Vercel'],
+      tags: ['TypeScript', 'Vercel'],
       featured: true
     },
     {
@@ -46,7 +46,7 @@ export const siteConfig: SiteConfig = {
       description: 'A live web experience deployed on Vercel.',
       link: 'https://bunge-mkononi.vercel.app',
       demoUrl: 'https://bunge-mkononi.vercel.app',
-      tags: ['JavaScript', 'Vercel']
+      tags: ['TypeScript', 'Vercel']
     }
   ],
   skills: [
@@ -55,12 +55,12 @@ export const siteConfig: SiteConfig = {
     'SQL',
     'HTML5',
     'CSS3',
-    'React',
     'Next.js',
     'Node.js',
+    'Python',
+    'Django',
     'Express',
     'MongoDB',
-    'Firebase',
     'Git',
     'Webpack',
     'REST APIs',
