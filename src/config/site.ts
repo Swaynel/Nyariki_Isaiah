@@ -27,39 +27,32 @@ export const siteConfig: SiteConfig = {
       title: 'E-Commerce Platform',
       description: 'A full-stack Job connect website built with vanilla javascript, Node.js, and uses fireStore as its database.',
       link: 'https://kazisha-connect.vercel.app',
+      demoUrl: 'https://kazisha-connect.vercel.app',
       tags: ['VanillaJs', 'Node.js', 'firestore'],
-      thumbnail: '/images/kazisha-preview.jpg',
       featured: true
     },
     {
-      id: 'kidcrescent',
-      title: 'Musician Website',
-      description: 'Author of the kidCrescent website',
-      link: 'https://kidcrescent.vercel.app/',
-      tags: ['JavaScript', 'Local Storage'],
-      thumbnail: '/images/kidcrescent-preview.jpg',
+      id: 'collegia-rerun',
+      title: 'Collegia Rerun',
+      description: 'A live web experience deployed on Vercel.',
+      link: 'https://collegia-rerun.vercel.app',
+      demoUrl: 'https://collegia-rerun.vercel.app',
+      tags: ['JavaScript', 'Vercel'],
       featured: true
     },
     {
-      id: 'weather-dashboard',
-      title: 'Weather Dashboard',
-      description: 'A weather forecasting app using a third-party API.',
-      link: '#',
-      tags: ['API Integration', 'CSS Grid'],
-      thumbnail: '/images/weather-preview.jpg'
-    },
-    {
-      id: 'grok-chatbot',
-      title: 'Grok 3 AI Chatbot',
-      description: 'A real-time chatbot integrated with xAI\'s Grok 3 API, showcasing API handling and UI interaction.',
-      link: '#',
-      tags: ['API Integration', 'JavaScript', 'xAI'],
-      thumbnail: '/images/chatbot-preview.jpg'
+      id: 'bunge-mkononi',
+      title: 'Bunge Mkononi',
+      description: 'A live web experience deployed on Vercel.',
+      link: 'https://bunge-mkononi.vercel.app',
+      demoUrl: 'https://bunge-mkononi.vercel.app',
+      tags: ['JavaScript', 'Vercel']
     }
   ],
   skills: [
     'JavaScript',
     'TypeScript',
+    'SQL',
     'HTML5',
     'CSS3',
     'React',

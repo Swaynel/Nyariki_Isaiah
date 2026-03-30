@@ -8,11 +8,21 @@ interface ProjectCardProps {
 export default function ProjectCard({ project }: ProjectCardProps) {
   return (
     <div className="bg-background border border-border rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-2 group">
-      <div className="relative h-48 overflow-hidden">
-        {project.thumbnail ? (
+      <div className="relative h-56 overflow-hidden bg-muted">
+        {project.demoUrl ? (
+          <iframe
+            src={project.demoUrl}
+            title={`${project.title} live preview`}
+            loading="lazy"
+            referrerPolicy="strict-origin-when-cross-origin"
+            className="h-full w-full border-0 bg-background"
+          />
+        ) : project.thumbnail ? (
           <Image
             src={project.thumbnail}
             alt={project.title}
+            fill
+            sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
           />
         ) : (
