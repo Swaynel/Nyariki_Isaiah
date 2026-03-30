@@ -42,7 +42,10 @@ export default function Hero() {
 
     const startBow = () => {
       setIsBowing(true);
-      timeoutId = setTimeout(() => setIsBowing(false), 920);
+      timeoutId = setTimeout(() => {
+        setIsBowing(false);
+        document.getElementById('about')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 920);
     };
 
     const typeSupport = () => {
@@ -128,7 +131,7 @@ export default function Hero() {
         gesture={isGreeting ? 'greeting' : isBowing ? 'bow' : 'none'}
         side="left"
         fullBleed
-        className="absolute inset-0 h-full min-h-screen w-full"
+        className="absolute inset-0 z-[1] h-full min-h-screen w-full"
       />
 
       {/*
