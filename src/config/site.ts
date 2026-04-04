@@ -32,11 +32,11 @@ export const siteConfig: SiteConfig = {
       featured: true
     },
     {
-      id: 'collegia-rerun',
-      title: 'Collegia Rerun',
-      description: 'A live web experience deployed on Vercel.',
-      link: 'https://collegia-rerun.vercel.app',
-      demoUrl: 'https://collegia-rerun.vercel.app',
+      id: 'thamani',
+      title: 'Thamani-ke',
+      description: 'A properties aggregator',
+      link: 'https://thamani-properties.vercel.app',
+      demoUrl: 'https://thamani-properties.vercel.app',
       tags: ['TypeScript', 'Vercel'],
       featured: true
     },

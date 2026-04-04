@@ -1,8 +1,8 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import { personalInfo } from '@/config/site';
-import WardenBot from '@/components/WardenBot';
+import type { HeroBotSnapshot } from '@/components/sayan/types';
+import { useHeroBotSequence } from '@/components/sections/hero/useHeroBotSequence';
 
 const HERO_INTRO = "I'm Sayan.";
 const HERO_SUPPORT =
@@ -10,237 +10,184 @@ const HERO_SUPPORT =
 const INTRO_PREFIX = "I'm ";
 const INTRO_NAME = 'Sayan';
 
-export default function Hero() {
-  const [typedIntro, setTypedIntro] = useState('');
-  const [typedMessage, setTypedMessage] = useState('');
-  const [typedSupport, setTypedSupport] = useState('');
-  const [isTypingIntro, setIsTypingIntro] = useState(true);
-  const [isTypingMessage, setIsTypingMessage] = useState(false);
-  const [isTypingSupport, setIsTypingSupport] = useState(false);
-  const [isGreeting, setIsGreeting] = useState(false);
-  const [isBowing, setIsBowing] = useState(false);
+interface HeroProps {
+  onBotChange?: (snapshot: HeroBotSnapshot) => void;
+}
+
+export default function Hero({ onBotChange }: HeroProps) {
   const heroMessage = `I speak for the systems behind ${personalInfo.name}'s work. I help you read the architecture faster, understand the engineering choices, and move through the portfolio with context instead of guesswork.`;
-  const isSpeaking =
-    (isTypingIntro && typedIntro.length > 0) ||
-    (isTypingMessage && typedMessage.length > 0) ||
-    (isTypingSupport && typedSupport.length > 0);
+  const {
+    typedIntro,
+    typedMessage,
+    typedSupport,
+    isTypingIntro,
+    isTypingMessage,
+    isTypingSupport,
+  } = useHeroBotSequence({
+    heroIntro: HERO_INTRO,
+    heroSupport: HERO_SUPPORT,
+    heroMessage,
+    onBotChange,
+  });
 
-  useEffect(() => {
-    let timeoutId: ReturnType<typeof setTimeout> | undefined;
-    let introIndex = 0;
-    let messageIndex = 0;
-    let supportIndex = 0;
-
-    setTypedIntro('');
-    setTypedMessage('');
-    setTypedSupport('');
-    setIsTypingIntro(true);
-    setIsTypingMessage(false);
-    setIsTypingSupport(false);
-    setIsGreeting(false);
-    setIsBowing(false);
-
-    const startBow = () => {
-      setIsBowing(true);
-      timeoutId = setTimeout(() => {
-        setIsBowing(false);
-        document.getElementById('about')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }, 920);
-    };
-
-    const typeSupport = () => {
-      if (supportIndex <= HERO_SUPPORT.length) {
-        setTypedSupport(HERO_SUPPORT.slice(0, supportIndex));
-        supportIndex += 1;
-        timeoutId = setTimeout(typeSupport, supportIndex < 8 ? 52 : 24);
-        return;
-      }
-
-      setIsTypingSupport(false);
-      timeoutId = setTimeout(startBow, 220);
-    };
-
-    const typeMessage = () => {
-      if (messageIndex <= heroMessage.length) {
-        setTypedMessage(heroMessage.slice(0, messageIndex));
-        messageIndex += 1;
-        timeoutId = setTimeout(typeMessage, messageIndex < 8 ? 55 : 24);
-        return;
-      }
-
-      setIsTypingMessage(false);
-      setIsTypingSupport(true);
-      timeoutId = setTimeout(typeSupport, 180);
-    };
-
-    const startMessage = () => {
-      setIsGreeting(false);
-      setIsTypingMessage(true);
-      timeoutId = setTimeout(typeMessage, 120);
-    };
-
-    const typeIntro = () => {
-      if (introIndex <= HERO_INTRO.length) {
-        setTypedIntro(HERO_INTRO.slice(0, introIndex));
-        introIndex += 1;
-        timeoutId = setTimeout(typeIntro, introIndex < 5 ? 90 : 55);
-        return;
-      }
-
-      setIsTypingIntro(false);
-      setIsGreeting(true);
-      timeoutId = setTimeout(startMessage, 820);
-    };
-
-    timeoutId = setTimeout(typeIntro, 320);
-
-    return () => {
-      if (timeoutId) {
-        clearTimeout(timeoutId);
-      }
-    };
-  }, [heroMessage]);
-
-  const scrollToContact = () => {
+  const scrollToContact = () =>
     document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
-  };
-
-  const scrollToProjects = () => {
+  const scrollToProjects = () =>
     document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' });
-  };
 
   const introPrefix = typedIntro.slice(0, Math.min(typedIntro.length, INTRO_PREFIX.length));
   const introName =
     typedIntro.length > INTRO_PREFIX.length
-      ? typedIntro.slice(
-          INTRO_PREFIX.length,
-          Math.min(typedIntro.length, INTRO_PREFIX.length + INTRO_NAME.length)
-        )
+      ? typedIntro.slice(INTRO_PREFIX.length, INTRO_PREFIX.length + INTRO_NAME.length)
       : '';
   const introSuffix =
     typedIntro.length > INTRO_PREFIX.length + INTRO_NAME.length
       ? typedIntro.slice(INTRO_PREFIX.length + INTRO_NAME.length)
       : '';
 
+  const tags = ['Node.js', 'TypeScript', 'Distributed Systems'];
+
   return (
-    <section id="hero" className="relative min-h-screen overflow-hidden bg-background">
-      {/* Bot sits on the LEFT half */}
-      <WardenBot
-        color="blue"
-        state={isSpeaking ? 'active' : isGreeting || isBowing ? 'idle' : 'thinking'}
-        gesture={isGreeting ? 'greeting' : isBowing ? 'bow' : 'none'}
-        side="left"
-        fullBleed
-        className="absolute inset-0 z-[1] h-full min-h-screen w-full"
+    <section
+      id="hero"
+      className="relative min-h-screen overflow-hidden bg-[#0e0e0e]"
+      style={{ fontFamily: "'Georgia', 'Times New Roman', serif" }}
+    >
+      {/* Ruled-line texture */}
+      <div
+        className="absolute inset-0 opacity-[0.03] pointer-events-none"
+        style={{
+          backgroundImage: `repeating-linear-gradient(
+            0deg,
+            transparent,
+            transparent 39px,
+            rgba(255,255,255,0.5) 39px,
+            rgba(255,255,255,0.5) 40px
+          )`,
+        }}
       />
 
-      {/*
-        Soft overlay: keep the LEFT open for the bot and brighten the RIGHT
-        slightly so the speech bubble sits naturally on the page background.
-      */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_24%_34%,rgba(56,189,248,0.08),transparent_24%),radial-gradient(circle_at_84%_16%,rgba(56,189,248,0.06),transparent_28%),linear-gradient(90deg,rgba(248,250,252,0.02)_0%,rgba(248,250,252,0.12)_32%,rgba(226,232,240,0.42)_64%,rgba(226,232,240,0.62)_100%)] dark:bg-[radial-gradient(circle_at_24%_34%,rgba(56,189,248,0.12),transparent_24%),radial-gradient(circle_at_84%_16%,rgba(56,189,248,0.08),transparent_28%),linear-gradient(90deg,rgba(2,6,23,0.06)_0%,rgba(2,6,23,0.22)_32%,rgba(2,6,23,0.7)_64%,rgba(2,6,23,0.88)_100%)]" />
-      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.03),rgba(226,232,240,0.12))] dark:bg-[linear-gradient(180deg,rgba(2,6,23,0.08),rgba(2,6,23,0.38))]" />
-      <div className="absolute inset-x-0 top-0 h-32 bg-[linear-gradient(180deg,rgba(255,255,255,0.3),transparent)] dark:bg-[linear-gradient(180deg,rgba(2,6,23,0.42),transparent)]" />
+      {/* Ambient glow — upper right */}
+      <div className="absolute top-0 right-0 w-[600px] h-[500px] rounded-full bg-amber-500/8 blur-[160px] pointer-events-none" />
 
-      {/*
-        Text content pushed to the RIGHT — use ml-auto so it naturally sits
-        in the right half regardless of viewport width.
-      */}
-      <div className="container-custom relative z-10 flex min-h-screen items-center justify-end px-4 py-24 sm:px-6 lg:px-8">
-        <div className="w-full max-w-2xl animate-fade-in-up">
-          <div className="mb-5 inline-flex items-center gap-3 rounded-full border border-border/70 bg-background/85 px-4 py-2 text-sm text-muted-foreground shadow-[0_12px_40px_rgba(15,23,42,0.12)] backdrop-blur-md dark:border-sky-300/15 dark:bg-slate-950/55 dark:text-slate-300 dark:shadow-[0_12px_40px_rgba(2,6,23,0.28)]">
-            <span className="flex h-2.5 w-2.5 rounded-full bg-sky-300 shadow-[0_0_18px_rgba(125,211,252,0.85)]" />
-            <span className="font-medium text-foreground dark:text-slate-100">Sayan is online</span>
-            <span className="text-muted-foreground dark:text-slate-400">
+      {/* Content pushed right to leave bot space */}
+      <div className="container-custom relative z-10 flex min-h-screen items-center justify-end px-6 py-24 lg:pl-[36rem] xl:pl-[40rem]">
+        <div className="w-full max-w-2xl lg:ml-auto">
+
+          {/* Status pill */}
+          <div
+            className="mb-10 inline-flex items-center gap-3 border border-white/[0.07] px-4 py-2"
+            style={{ fontFamily: 'system-ui, sans-serif' }}
+          >
+            <span className="flex h-2 w-2 rounded-full bg-amber-400 shadow-[0_0_10px_rgba(251,191,36,0.8)]" />
+            <span className="text-white/60 text-xs uppercase tracking-[0.25em]">
+              Sayan is online
+            </span>
+            <span className="text-white/20 text-xs">·</span>
+            <span className="text-white/30 text-xs tracking-wide">
               AI system persona for {personalInfo.name}
             </span>
           </div>
 
-          <div className="relative rounded-[2rem] border border-border/80 bg-background/92 px-6 py-6 shadow-[0_24px_80px_rgba(15,23,42,0.14)] backdrop-blur-xl dark:border-sky-300/20 dark:bg-slate-950/76 dark:shadow-[0_24px_80px_rgba(2,6,23,0.58)] sm:px-8 sm:py-8">
-            {/*
-              Speech-bubble tail pointing LEFT toward the bot.
-              Rotated so the corner points left-center of the card.
-            */}
-            <div className="pointer-events-none absolute -left-3 top-8 h-6 w-6 rotate-45 rounded-[0.35rem] border-l border-t border-border/80 bg-background/92 dark:border-sky-300/20 dark:bg-slate-950/76" />
-            <div className="pointer-events-none absolute inset-0 rounded-[2rem] bg-[radial-gradient(circle_at_top_right,rgba(56,189,248,0.1),transparent_26%)] dark:bg-[radial-gradient(circle_at_top_right,rgba(125,211,252,0.12),transparent_26%)]" />
+          {/* Speech card */}
+          <div className="relative border border-white/[0.07] bg-white/[0.02] p-8 sm:p-10">
+            {/* Amber left accent */}
+            <div className="absolute left-0 top-8 bottom-8 w-[2px] bg-gradient-to-b from-amber-500/0 via-amber-500 to-amber-500/0" />
 
-            <div className="relative">
-              <span className="inline-flex items-center gap-3 rounded-full border border-border/70 bg-background/70 px-4 py-2 text-xs font-semibold uppercase tracking-[0.28em] text-sky-700 dark:border-white/10 dark:bg-white/5 dark:text-sky-200/90">
-                <span className="h-2 w-2 rounded-full bg-sky-300" />
-                Message From Sayan
-              </span>
+            {/* Speech tail pointing left toward the bot */}
+            <div className="pointer-events-none absolute -left-3 top-10 h-5 w-5 rotate-45 border-l border-t border-white/[0.07] bg-[#0e0e0e]" />
 
-              <h1
-                aria-live="polite"
-                className="mt-6 min-h-[3.5rem] text-4xl font-bold font-heading leading-tight text-foreground dark:text-white sm:min-h-[4.25rem] sm:text-5xl lg:min-h-[4.75rem] lg:text-6xl"
-              >
-                {introPrefix}
-                <span className="text-sky-600 dark:text-sky-300">{introName}</span>
-                {introSuffix}
-                {isTypingIntro ? (
-                  <span
-                    aria-hidden="true"
-                    className="ml-1 inline-block h-[0.95em] w-[0.12em] animate-pulse align-[-0.12em] bg-sky-600 dark:bg-sky-300"
-                  />
-                ) : null}
-              </h1>
-
-              <p
-                aria-live="polite"
-                className="mt-5 min-h-[7.5rem] text-lg leading-relaxed text-foreground/85 dark:text-slate-200 sm:min-h-[6.25rem] sm:text-xl"
-              >
-                {typedMessage}
-                {isTypingMessage ? (
-                  <span
-                    aria-hidden="true"
-                    className="ml-1 inline-block h-[1.05em] w-[0.12em] animate-pulse align-[-0.16em] bg-sky-600 dark:bg-sky-300"
-                  />
-                ) : null}
-              </p>
-
-              <p
-                aria-live="polite"
-                className="mt-5 min-h-[4.5rem] max-w-xl text-base leading-relaxed text-muted-foreground dark:text-slate-300 sm:min-h-[4rem] sm:text-lg"
-              >
-                {typedSupport}
-                {isTypingSupport ? (
-                  <span
-                    aria-hidden="true"
-                    className="ml-1 inline-block h-[1.05em] w-[0.12em] animate-pulse align-[-0.16em] bg-sky-600 dark:bg-sky-300"
-                  />
-                ) : null}
-              </p>
+            {/* Eyebrow */}
+            <div
+              className="mb-6 inline-flex items-center gap-2 text-[10px] uppercase tracking-[0.3em] text-amber-500"
+              style={{ fontFamily: 'system-ui, sans-serif' }}
+            >
+              <span className="h-1.5 w-1.5 rounded-full bg-amber-400" />
+              Message from Sayan
             </div>
 
-            <div className="mt-6 flex flex-wrap gap-3">
-              <span className="rounded-full border border-border/70 bg-background/70 px-4 py-2 text-sm text-muted-foreground dark:border-white/10 dark:bg-white/5 dark:text-slate-300">
-                Node.js
-              </span>
-              <span className="rounded-full border border-border/70 bg-background/70 px-4 py-2 text-sm text-muted-foreground dark:border-white/10 dark:bg-white/5 dark:text-slate-300">
-                TypeScript
-              </span>
-              <span className="rounded-full border border-border/70 bg-background/70 px-4 py-2 text-sm text-muted-foreground dark:border-white/10 dark:bg-white/5 dark:text-slate-300">
-                Distributed Systems
-              </span>
+            {/* Headline */}
+            <h1
+              aria-live="polite"
+              className="min-h-[3.5rem] text-4xl font-normal leading-tight text-white sm:text-5xl lg:text-6xl"
+              style={{ fontStyle: 'italic' }}
+            >
+              {introPrefix}
+              <span className="text-amber-400">{introName}</span>
+              {introSuffix}
+              {isTypingIntro && (
+                <span
+                  aria-hidden="true"
+                  className="ml-1 inline-block h-[0.9em] w-[2px] animate-pulse align-[-0.1em] bg-amber-400"
+                />
+              )}
+            </h1>
+
+            {/* Message body */}
+            <p
+              aria-live="polite"
+              className="mt-6 min-h-[7rem] text-base leading-relaxed text-white/55 sm:text-lg sm:min-h-[5.5rem]"
+              style={{ fontFamily: 'system-ui, sans-serif', fontStyle: 'normal' }}
+            >
+              {typedMessage}
+              {isTypingMessage && (
+                <span
+                  aria-hidden="true"
+                  className="ml-1 inline-block h-[1em] w-[2px] animate-pulse align-[-0.12em] bg-amber-400"
+                />
+              )}
+            </p>
+
+            {/* Support line */}
+            <p
+              aria-live="polite"
+              className="mt-4 min-h-[4rem] max-w-xl text-sm leading-relaxed text-white/30 sm:text-base sm:min-h-[3.5rem]"
+              style={{ fontStyle: 'italic' }}
+            >
+              {typedSupport}
+              {isTypingSupport && (
+                <span
+                  aria-hidden="true"
+                  className="ml-1 inline-block h-[1em] w-[2px] animate-pulse align-[-0.12em] bg-amber-400"
+                />
+              )}
+            </p>
+
+            {/* Tech tags */}
+            <div className="mt-8 flex flex-wrap gap-2">
+              {tags.map((tag) => (
+                <span
+                  key={tag}
+                  className="text-[10px] uppercase tracking-[0.2em] px-3 py-1.5 border border-white/10 text-white/30"
+                  style={{ fontFamily: 'system-ui, sans-serif' }}
+                >
+                  {tag}
+                </span>
+              ))}
             </div>
 
-            <div className="mt-8 flex flex-wrap gap-4">
+            {/* CTAs */}
+            <div className="mt-10 flex flex-wrap gap-4">
               <button
                 onClick={scrollToContact}
-                className="rounded-full bg-sky-400 px-7 py-3 text-base font-semibold text-slate-950 transition-transform duration-300 hover:-translate-y-1 hover:bg-sky-300"
+                className="group/btn relative inline-flex items-center gap-2 border border-amber-500/50 text-amber-500 px-7 py-3 text-sm uppercase tracking-widest overflow-hidden transition-all duration-300 hover:border-amber-500 hover:text-[#0e0e0e]"
+                style={{ fontFamily: 'system-ui, sans-serif' }}
               >
-                Talk to Isaiah
+                <span className="absolute inset-0 bg-amber-500 translate-y-full group-hover/btn:translate-y-0 transition-transform duration-300 ease-in-out" />
+                <span className="relative">Talk to {personalInfo.name.split(' ')[0]}</span>
+                <span className="relative">→</span>
               </button>
+
               <button
                 onClick={scrollToProjects}
-                className="rounded-full border border-border/80 bg-background/70 px-7 py-3 text-base font-semibold text-foreground transition-transform duration-300 hover:-translate-y-1 hover:bg-accent hover:text-accent-foreground dark:border-white/15 dark:bg-white/5 dark:text-white dark:hover:bg-white/10 dark:hover:text-white"
+                className="inline-flex items-center gap-2 border border-white/10 text-white/40 px-7 py-3 text-sm uppercase tracking-widest transition-all duration-300 hover:border-white/30 hover:text-white/70"
+                style={{ fontFamily: 'system-ui, sans-serif' }}
               >
                 Show Me the Work
               </button>
             </div>
           </div>
 
-        
         </div>
       </div>
     </section>
