@@ -4,7 +4,6 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 
 const INITIAL_WORD_DELAY_MS = 260;
 const WORD_STEP_DELAY_MS = 120;
-const LOOP_RESET_DELAY_MS = 900;
 
 export function useAboutReading(text?: string) {
   const sectionRef = useRef<HTMLElement | null>(null);
@@ -41,17 +40,19 @@ export function useAboutReading(text?: string) {
       return;
     }
 
-    const isStarting = activeWordIndex === -1;
-    const isAtEnd = activeWordIndex >= words.length - 1;
+    if (activeWordIndex >= words.length - 1) {
+      return;
+    }
+
     const timeoutId = setTimeout(() => {
       setActiveWordIndex((current) => {
-        if (current >= words.length - 1) {
+        if (current < 0) {
           return 0;
         }
 
         return current + 1;
       });
-    }, isStarting ? INITIAL_WORD_DELAY_MS : isAtEnd ? LOOP_RESET_DELAY_MS : WORD_STEP_DELAY_MS);
+    }, activeWordIndex === -1 ? INITIAL_WORD_DELAY_MS : WORD_STEP_DELAY_MS);
 
     return () => {
       clearTimeout(timeoutId);

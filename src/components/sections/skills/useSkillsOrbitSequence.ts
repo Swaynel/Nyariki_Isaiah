@@ -86,7 +86,17 @@ export function useSkillsOrbitSequence(
   }, []);
 
   useEffect(() => {
-    if (!isInView || hasStartedRef.current) {
+    if (!isInView) {
+      if (hasStartedRef.current) {
+        hasStartedRef.current = false;
+        setVisibleCount(0);
+        setPhase('idle');
+      }
+
+      return;
+    }
+
+    if (hasStartedRef.current) {
       return;
     }
 
