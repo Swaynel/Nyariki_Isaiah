@@ -11,32 +11,82 @@ export default function About() {
     <section
       ref={sectionRef}
       id="about"
-      className="relative min-h-[calc(100svh+10rem)] scroll-mt-20 overflow-hidden bg-background lg:min-h-screen"
+      className="section-padding relative min-h-[calc(100svh+10rem)] scroll-mt-20 overflow-hidden bg-[#0e0e0e] lg:min-h-screen"
+      style={{ fontFamily: "'Georgia', 'Times New Roman', serif" }}
     >
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_76%_34%,rgba(56,189,248,0.08),transparent_24%),radial-gradient(circle_at_18%_16%,rgba(56,189,248,0.06),transparent_28%),linear-gradient(270deg,rgba(248,250,252,0.02)_0%,rgba(248,250,252,0.12)_32%,rgba(226,232,240,0.42)_64%,rgba(226,232,240,0.62)_100%)] dark:bg-[radial-gradient(circle_at_76%_34%,rgba(56,189,248,0.12),transparent_24%),radial-gradient(circle_at_18%_16%,rgba(56,189,248,0.08),transparent_28%),linear-gradient(270deg,rgba(2,6,23,0.06)_0%,rgba(2,6,23,0.22)_32%,rgba(2,6,23,0.7)_64%,rgba(2,6,23,0.88)_100%)]" />
-      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.03),rgba(226,232,240,0.12))] dark:bg-[linear-gradient(180deg,rgba(2,6,23,0.08),rgba(2,6,23,0.38))]" />
+      <div
+        className="absolute inset-0 opacity-[0.03] pointer-events-none"
+        style={{
+          backgroundImage: `repeating-linear-gradient(
+            0deg,
+            transparent,
+            transparent 39px,
+            rgba(255,255,255,0.5) 39px,
+            rgba(255,255,255,0.5) 40px
+          )`,
+        }}
+      />
 
-      <div className="container-custom relative z-10 flex min-h-[calc(100svh+10rem)] items-center px-4 py-20 sm:px-6 lg:min-h-screen lg:pr-[36rem] lg:px-8 xl:pr-[40rem]">
-        <div className="w-full max-w-3xl">
-          <h2 className="mb-8 relative inline-block text-3xl font-bold font-heading sm:text-4xl">
-            About Me
-            <span className="absolute bottom-0 left-0 h-1 w-12 bg-primary mt-2" />
-          </h2>
-          <p className="text-lg leading-relaxed opacity-90">
-            {words.map((word, index) => (
-              <span
-                key={`${word}-${index}`}
-                className={cn(
-                  'rounded px-0.5 py-0.5 transition-all duration-200',
-                  index === activeWordIndex &&
-                    'bg-sky-100 font-semibold text-sky-700 shadow-[0_0_0_1px_rgba(56,189,248,0.22)] dark:bg-sky-400/12 dark:text-sky-200 dark:shadow-[0_0_0_1px_rgba(125,211,252,0.2)]'
-                )}
+      <div className="absolute top-0 right-1/4 h-[320px] w-[500px] rounded-full bg-amber-500/10 blur-[120px] pointer-events-none" />
+
+      <div className="container-custom relative z-10 flex min-h-[calc(100svh+10rem)] items-center px-6 lg:min-h-screen lg:pr-[36rem] xl:pr-[40rem]">
+        <div className="w-full max-w-4xl">
+          <div className="mb-20 flex items-end gap-6">
+            <div>
+              <p
+                className="mb-3 text-xs uppercase tracking-[0.35em] text-amber-500"
+                style={{ fontFamily: 'system-ui, sans-serif' }}
               >
-                {word}
-                {index < words.length - 1 ? ' ' : ''}
-              </span>
-            ))}
-          </p>
+                Who I am
+              </p>
+              <h2
+                className="leading-none text-white"
+                style={{
+                  fontSize: 'clamp(3rem, 8vw, 6rem)',
+                  fontStyle: 'italic',
+                  fontWeight: 400,
+                }}
+              >
+                About Me
+              </h2>
+            </div>
+            <div className="mb-4 hidden h-px flex-1 bg-gradient-to-r from-amber-500/50 to-transparent md:block" />
+          </div>
+
+          <div className="relative border border-white/[0.07] bg-white/[0.02] p-8 md:p-10">
+            <div className="absolute left-0 top-8 bottom-8 w-[2px] bg-gradient-to-b from-amber-500/0 via-amber-500 to-amber-500/0" />
+            <div className="pointer-events-none absolute -left-3 top-10 h-5 w-5 rotate-45 border-l border-t border-white/[0.07] bg-[#0e0e0e]" />
+
+            <p
+              className="mb-6 text-[10px] uppercase tracking-[0.3em] text-amber-500"
+              style={{ fontFamily: 'system-ui, sans-serif' }}
+            >
+              Editorial note
+            </p>
+
+            <p className="text-lg leading-relaxed text-white/80 md:text-xl" style={{ fontStyle: 'italic' }}>
+              {words.map((word, index) => (
+                <span
+                  key={`${word}-${index}`}
+                  className={cn(
+                    'rounded px-0.5 py-0.5 transition-all duration-200',
+                    index === activeWordIndex &&
+                      'bg-amber-500/10 text-amber-100 shadow-[0_0_0_1px_rgba(245,158,11,0.22)]'
+                  )}
+                >
+                  {word}
+                  {index < words.length - 1 ? ' ' : ''}
+                </span>
+              ))}
+            </p>
+
+            <p
+              className="mt-6 max-w-2xl text-sm uppercase tracking-[0.25em] text-white/30"
+              style={{ fontFamily: 'system-ui, sans-serif' }}
+            >
+              {personalInfo.name} · Backend & systems engineering
+            </p>
+          </div>
         </div>
       </div>
     </section>

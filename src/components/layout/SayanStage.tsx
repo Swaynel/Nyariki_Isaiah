@@ -16,7 +16,8 @@ interface SayanStageProps {
 }
 
 const STAGED_SECTIONS = Object.keys(SECTION_STAGE_SIDE) as StageSectionId[];
-const STAGE_VISUAL_HEIGHT = 'clamp(30rem, 78svh, 52rem)';
+const STAGE_VISUAL_HEIGHT_CLASSES =
+  'h-[clamp(17rem,42svh,24rem)] sm:h-[clamp(24rem,58svh,36rem)] lg:h-[clamp(30rem,78svh,52rem)]';
 
 export default function SayanStage({ heroState, sectionOverrides }: SayanStageProps) {
   const [activeSection, setActiveSection] = useState<StageSectionId | null>('hero');
@@ -166,11 +167,8 @@ export default function SayanStage({ heroState, sectionOverrides }: SayanStagePr
     >
       {targetMetric ? (
         <div
-          className="absolute inset-x-0 top-1/2 -translate-y-1/2"
-          style={{
-            height: STAGE_VISUAL_HEIGHT,
-            maxHeight: '100%',
-          }}
+          className={`absolute inset-x-0 top-1/2 -translate-y-1/2 ${STAGE_VISUAL_HEIGHT_CLASSES}`}
+          style={{ maxHeight: '100%' }}
         >
           <WardenBot
             color="blue"
