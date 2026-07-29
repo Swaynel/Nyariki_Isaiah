@@ -62,7 +62,7 @@ export default function Hero({ onBotChange }: HeroProps) {
             transparent,
             transparent 39px,
             rgba(255,255,255,0.5) 39px,
-            rgba(255,255,255,0.5) 40px
+            rgba(255,255,255,0.5) ·
           )`,
         }}
       />
