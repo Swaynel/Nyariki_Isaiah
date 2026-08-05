@@ -18,6 +18,9 @@ export const metadata: Metadata = {
   title: 'Isaiah Nyariki - Backend Engineer',
   description: 'Portfolio of Isaiah Nyariki, a backend engineer specializing in Node.js and modern web technologies.',
   authors: [{ name: 'Isaiah Nyariki' }],
+  verification: {
+    google: 'p6h6ssVDpv8Cs0CtY29jZzT0as2bKjqa1NMl5dbx0-c',
+  },
 };
 
 export default function RootLayout({
